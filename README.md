@@ -1,2 +1,1 @@
-# debian_symbol_files
-debian_symbol_files
+some debian debug symbol files
