@@ -9,22 +9,35 @@ import os, sys
 import traceback
 
 paths = [
-    "debian-security/pool/main/p/python2.7",
     "debian/pool/main/p/python2.7",
-    "debian-security/pool/main/g/glibc",
+    "debian-security/pool/main/p/python2.7",
+
+    "debian/pool/main/p/python3.7",
+    "debian-security/pool/main/p/python3.7",
+
+    "debian/pool/main/p/python3.8",
+    "debian-security/pool/main/p/python3.8",
+
+    # "kali/pool/main/g/glibc",
     "debian/pool/main/g/glibc",
+    "debian/pool/main/j/jemalloc",
+    "debian-security/pool/main/j/jemalloc",
+    "debian-security/pool/main/g/glibc",
 ]
 
 urls = [
-    "https://mirrors.tuna.tsinghua.edu.cn",
-    "http://ftp.debian.org",
-    "http://security.debian.org",
-    "http://archive.debian.org",
-    "http://ftp.jp.debian.org",
+    # "https://mirrors.tuna.tsinghua.edu.cn",
+    # "http://ftp.debian.org",
+    # "http://security.debian.org",
+    # "http://archive.debian.org",
+    # "http://ftp.jp.debian.org",
 
-    "http://apt.x.netease.com:8660",
+    # "http://apt.x.netease.com:8660",
 
-    "http://ftp.riken.jp/Linux/debian",
+    "https://repo.huaweicloud.com",
+
+    # "http://ftp.riken.jp/Linux/debian",
+    # "http://ftp.tku.edu.tw/kali/pool/main/g/glib"
     "https://deb.sipwise.com", # 这个很全 但是比较慢
     ]
 
@@ -66,7 +79,8 @@ def handle_url(url):
             continue
         if "amd64" not in href:
             continue
-        if href.startswith("python2.7-dbg") or href.startswith("libc6-dbg"):
+        if href.startswith("python3.7-dbg") or href.startswith("python2.7-dbg") or href.startswith("libc6-dbg") or (href.startswith("libjemalloc") and "-dbg" in href) :
+            print href
             path = "%s/%s" % (url, href)
             handle_deb_file(href, path)
             # print e, e.__dict__
@@ -116,4 +130,14 @@ def down_http_file(url, filename):
     with open(filename, "w+") as wf:
         wf.write(resp.content)
 
-main()
+def one():
+    filename = sys.argv[1]
+    name = os.path.basename(filename)
+    print filename
+    print name
+    run("dpkg -x %s extract/%s" % (filename, name[:-4]))
+    save_symbol_files("extract/%s" % name[:-4])
+
+if __name__ == "__main__":
+    main()
+    # one()
