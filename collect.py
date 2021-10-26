@@ -79,12 +79,39 @@ def handle_url(url):
             continue
         if "amd64" not in href:
             continue
+        if href.startswith("libc6_"):
+            continue
+            print href
+            path = "%s/%s" % (url, href)
+            handle_thread_deb_file(href, path)
+            continue
         if href.startswith("python3.7-dbg") or href.startswith("python2.7-dbg") or href.startswith("libc6-dbg") or (href.startswith("libjemalloc") and "-dbg" in href) :
+            continue
             print href
             path = "%s/%s" % (url, href)
             handle_deb_file(href, path)
             # print e, e.__dict__
             # print e.get_text()
+
+def handle_thread_deb_file(name, url):
+    if name in deb_files and 0:
+        print "seen", name
+        return
+    print "begin", name
+    filename = "./deb/%s" % name
+    print filename
+    down_http_file(url, filename)
+    run("dpkg -x %s extract/%s" % (filename, name[:-4]))
+
+    dirname = "./extract/%s/lib/x86_64-linux-gnu/" % name[:-4]
+
+    for name in os.listdir(dirname):
+        # if "libc-" in name and ".so" in name:
+        if "libpthread-" in name and ".so" in name:
+            build_id = get_build_id(os.path.join(dirname, name))
+            run("mv %s thread_db/%s" % (os.path.join(dirname, "libthread_db-1.0.so"), build_id))
+            print "thread", name, build_id
+            break
 
 def handle_deb_file(name, url):
     if name in deb_files:
