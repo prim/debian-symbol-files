@@ -23,6 +23,13 @@ paths = [
     "debian/pool/main/j/jemalloc",
     "debian-security/pool/main/j/jemalloc",
     "debian-security/pool/main/g/glibc",
+
+    "debian/pool/main/g/gcc-6",
+    "debian/pool/main/g/gcc-8",
+    "debian-security/pool/main/g/gcc-6",
+    "debian-security/pool/main/g/gcc-8",
+
+    # "debian-security/pool/main/g/gcc-10",
 ]
 
 urls = [
@@ -85,8 +92,16 @@ def handle_url(url):
             path = "%s/%s" % (url, href)
             handle_thread_deb_file(href, path)
             continue
+
+        if href.startswith("libstdc++") and "dbg_" in href:
+            print href
+            path = "%s/%s" % (url, href)
+            handle_deb_file(href, path)
+
+        continue
+
+
         if href.startswith("python3.7-dbg") or href.startswith("python2.7-dbg") or href.startswith("libc6-dbg") or (href.startswith("libjemalloc") and "-dbg" in href) :
-            continue
             print href
             path = "%s/%s" % (url, href)
             handle_deb_file(href, path)
