@@ -30,6 +30,8 @@ paths = [
     "debian-security/pool/main/g/gcc-8",
 
     # "debian-security/pool/main/g/gcc-10",
+
+    "debian-debug/pool/main/j/jemalloc",
 ]
 
 urls = [
@@ -43,9 +45,12 @@ urls = [
 
     "https://repo.huaweicloud.com",
 
+    # libjemalloc2-dbgsym
+    "http://deb.debian.org",
+
     # "http://ftp.riken.jp/Linux/debian",
     # "http://ftp.tku.edu.tw/kali/pool/main/g/glib"
-    "https://deb.sipwise.com", # 这个很全 但是比较慢
+    # "https://deb.sipwise.com", # 这个很全 但是比较慢
     ]
 
 deb_files = set()
@@ -97,9 +102,6 @@ def handle_url(url):
             print href
             path = "%s/%s" % (url, href)
             handle_deb_file(href, path)
-
-        continue
-
 
         if href.startswith("python3.7-dbg") or href.startswith("python2.7-dbg") or href.startswith("libc6-dbg") or (href.startswith("libjemalloc") and "-dbg" in href) :
             print href
