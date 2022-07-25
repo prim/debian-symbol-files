@@ -12,11 +12,26 @@ paths = [
     "debian/pool/main/p/python2.7",
     "debian-security/pool/main/p/python2.7",
 
+    "debian/pool/main/p/python3.4",
+    "debian-security/pool/main/p/python3.4",
+
+    "debian/pool/main/p/python3.5",
+    "debian-security/pool/main/p/python3.5",
+
     "debian/pool/main/p/python3.7",
     "debian-security/pool/main/p/python3.7",
 
     "debian/pool/main/p/python3.8",
     "debian-security/pool/main/p/python3.8",
+
+    "debian/pool/main/p/python3.9",
+    "debian-security/pool/main/p/python3.9",
+
+    "debian/pool/main/p/python3.10",
+    "debian-security/pool/main/p/python3.10",
+
+    "debian/pool/main/p/python3.11",
+    "debian-security/pool/main/p/python3.11",
 
     # "kali/pool/main/g/glibc",
     "debian/pool/main/g/glibc",
@@ -103,7 +118,13 @@ def handle_url(url):
             path = "%s/%s" % (url, href)
             handle_deb_file(href, path)
 
-        if href.startswith("python3.7-dbg") or href.startswith("python2.7-dbg") or href.startswith("libc6-dbg") or (href.startswith("libjemalloc") and "-dbg" in href) :
+        python = ["pyhton2.7-dbg", "python3.4-dbg", "python3.5-dbg", "python3.7-dbg", "python3.8-dbg", "python3.9-dbg", "python3.10-dbg", "python3.11-dbg"]
+        if any([href.startswith(name) for name in python]):
+            print href
+            path = "%s/%s" % (url, href)
+            handle_deb_file(href, path)
+
+        if href.startswith("libc6-dbg") or (href.startswith("libjemalloc") and "-dbg" in href) :
             print href
             path = "%s/%s" % (url, href)
             handle_deb_file(href, path)
