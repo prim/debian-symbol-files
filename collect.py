@@ -47,6 +47,7 @@ paths = [
     # "debian-security/pool/main/g/gcc-10",
 
     "debian-debug/pool/main/j/jemalloc",
+    "debian-debug/pool/main/g/google-perftools",
 ]
 
 urls = [
@@ -130,6 +131,16 @@ def handle_url(url):
             handle_deb_file(href, path)
             # print e, e.__dict__
             # print e.get_text()
+
+        if href.startswith("libgoogle-perftools4-dbgsym"):
+            print href
+            path = "%s/%s" % (url, href)
+            handle_deb_file(href, path)
+
+        if href.startswith("libtcmalloc-minimal4-dbgsym"):
+            print href
+            path = "%s/%s" % (url, href)
+            handle_deb_file(href, path)
 
 def handle_thread_deb_file(name, url):
     if name in deb_files and 0:
