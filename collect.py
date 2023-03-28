@@ -8,7 +8,7 @@ import logging
 import os, sys
 import traceback
 
-paths = [
+python_paths = [
     "debian/pool/main/p/python2.7",
     "debian-security/pool/main/p/python2.7",
 
@@ -32,23 +32,41 @@ paths = [
 
     "debian/pool/main/p/python3.11",
     "debian-security/pool/main/p/python3.11",
+]
 
+glibc_paths = [
     # "kali/pool/main/g/glibc",
+
     "debian/pool/main/g/glibc",
-    "debian/pool/main/j/jemalloc",
-    "debian-security/pool/main/j/jemalloc",
+    "debian-debug/pool/main/g/glibc",
     "debian-security/pool/main/g/glibc",
 
     "debian/pool/main/g/gcc-6",
-    "debian/pool/main/g/gcc-8",
     "debian-security/pool/main/g/gcc-6",
+
+    "debian/pool/main/g/gcc-8",
     "debian-security/pool/main/g/gcc-8",
 
     # "debian-security/pool/main/g/gcc-10",
-
-    "debian-debug/pool/main/j/jemalloc",
-    "debian-debug/pool/main/g/google-perftools",
 ]
+
+jemalloc_paths = [
+    "debian/pool/main/j/jemalloc",
+    "debian-debug/pool/main/j/jemalloc",
+    "debian-security/pool/main/j/jemalloc",
+]
+
+tcmalloc_paths = [
+    "debian/pool/main/g/google-perftools",
+    "debian-debug/pool/main/g/google-perftools",
+    "debian-security/pool/main/g/google-perftools",
+]
+
+paths = []
+paths.extend(python_paths)
+paths.extend(glibc_paths)
+paths.extend(jemalloc_paths)
+paths.extend(tcmalloc_paths)
 
 urls = [
     # "https://mirrors.tuna.tsinghua.edu.cn",
@@ -60,6 +78,8 @@ urls = [
     # "http://apt.x.netease.com:8660",
 
     "https://repo.huaweicloud.com",
+
+    "http://ftp.fedora.is",
 
     # libjemalloc2-dbgsym
     "http://deb.debian.org",
@@ -101,8 +121,13 @@ def handle_url(url):
         print "handle_url", url, resp.status_code
         return
     soup = BeautifulSoup(resp.text, 'html.parser')
+
+    with open("debug.html", "wb+")  as wfile:
+        wfile.write(resp.text.encode('utf8'))
+
     for e in soup.find_all('a'):
         href = e.attrs["href"]
+        # print href
         if not href.endswith(".deb"):
             continue
         if "amd64" not in href:
@@ -132,7 +157,7 @@ def handle_url(url):
             # print e, e.__dict__
             # print e.get_text()
 
-        if href.startswith("libgoogle-perftools4-dbgsym"):
+        if href.startswith("libgoogle-perftools4-dbg"):
             print href
             path = "%s/%s" % (url, href)
             handle_deb_file(href, path)
