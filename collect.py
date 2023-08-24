@@ -32,6 +32,9 @@ python_paths = [
 
     "debian/pool/main/p/python3.11",
     "debian-security/pool/main/p/python3.11",
+
+    "pool/updates/main/p/python2.7",
+    "pool/updates/main/p/python3.7",
 ]
 
 glibc_paths = [
@@ -71,8 +74,6 @@ paths.extend(tcmalloc_paths)
 urls = [
     # "https://mirrors.tuna.tsinghua.edu.cn",
     # "http://ftp.debian.org",
-    # "http://security.debian.org",
-    # "http://archive.debian.org",
     # "http://ftp.jp.debian.org",
 
     # "http://apt.x.netease.com:8660",
@@ -83,6 +84,8 @@ urls = [
 
     # libjemalloc2-dbgsym
     "http://deb.debian.org",
+    "http://archive.debian.org",
+    "http://security.debian.org",
 
     # "http://ftp.riken.jp/Linux/debian",
     # "http://ftp.tku.edu.tw/kali/pool/main/g/glib"
@@ -110,6 +113,8 @@ def main():
     init_log()
     init_local_files()
     for url in urls:
+        # if "secu" not in url:
+        #     continue
         for path in paths:
             rurl = "%s/%s" % (url, path)
             handle_url(rurl)
@@ -127,14 +132,15 @@ def handle_url(url):
 
     for e in soup.find_all('a'):
         href = e.attrs["href"]
-        # print href
         if not href.endswith(".deb"):
             continue
+        # print href
         if "amd64" not in href:
+            # print href, 1
             continue
         if href.startswith("libc6_"):
+            # print href, 2
             continue
-            print href
             path = "%s/%s" % (url, href)
             handle_thread_deb_file(href, path)
             continue
@@ -144,7 +150,7 @@ def handle_url(url):
             path = "%s/%s" % (url, href)
             handle_deb_file(href, path)
 
-        python = ["pyhton2.7-dbg", "python3.4-dbg", "python3.5-dbg", "python3.7-dbg", "python3.8-dbg", "python3.9-dbg", "python3.10-dbg", "python3.11-dbg"]
+        python = ["python2.7-dbg", "python3.4-dbg", "python3.5-dbg", "python3.7-dbg", "python3.8-dbg", "python3.9-dbg", "python3.10-dbg", "python3.11-dbg"]
         if any([href.startswith(name) for name in python]):
             print href
             path = "%s/%s" % (url, href)
