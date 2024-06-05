@@ -89,7 +89,7 @@ urls = [
 
     # "http://ftp.riken.jp/Linux/debian",
     # "http://ftp.tku.edu.tw/kali/pool/main/g/glib"
-    # "https://deb.sipwise.com", # 这个很全 但是比较慢
+    "https://deb.sipwise.com", # 这个很全 但是比较慢
     ]
 
 deb_files = set()
